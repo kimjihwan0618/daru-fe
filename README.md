@@ -1,0 +1,73 @@
+# DARU Frontend
+
+출근 경로, 날씨, 관심 산업과 종목의 변화를 하나의 **3분 개인화 아침 브리핑**으로 제공하는 Next.js 프론트엔드입니다.
+
+## 기술 스택
+
+- Next.js 16 App Router + React 19
+- TypeScript
+- Tailwind CSS 4
+- TanStack Query: 서버 상태, 캐시, 재시도 정책
+- Zod: FastAPI 응답 런타임 검증
+- Lucide React: 일관된 아이콘 시스템
+- ESLint + Next.js 권장 규칙
+
+전역 클라이언트 상태 라이브러리는 현재 MVP에 필요하지 않아 제외했습니다. 사용자 인증이 추가되면 서버 세션을 기준으로 설계하고, 화면 전용 상태는 컴포넌트에 가깝게 유지합니다.
+
+## 실행
+
+```bash
+npm install
+npm run dev
+```
+
+브라우저에서 `http://localhost:3000`을 엽니다.
+
+## FastAPI 연결
+
+`.env.example`을 `.env.local`로 복사하고 백엔드 주소를 설정합니다.
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+```
+
+프론트는 `GET /api/briefing`을 호출하며, 응답은 `src/lib/briefing.ts`의 Zod 스키마를 통과해야 합니다. 환경 변수가 비어 있으면 데모를 위한 Next.js Route Handler가 사용됩니다.
+
+## 구현된 사용자 흐름
+
+- 비회원의 오늘 브리핑 즉시 체험
+- 출발 권장 시각, 교통 지연, 날씨 확인
+- 중복 뉴스를 이슈 단위로 탐색
+- 관심 종목과 관련 이슈 연결
+- 3단계 브리핑 재생과 근거 확인
+- 저장, 공유, 유용성 피드백
+- 로그인 후 개인 브리핑 전환 CTA
+- 모바일/태블릿/데스크톱 반응형 레이아웃
+
+## 주요 디렉터리
+
+```text
+src/
+  app/
+    api/briefing/route.ts  # 개발용 mock API
+    login/page.tsx         # 로그인 페이지
+    layout.tsx
+    page.tsx
+  components/
+    layout/                # 공통 헤더와 푸터
+    ui/                    # Button, Card, Input, Badge
+    query-provider.tsx
+  features/
+    auth/                  # 로그인 폼과 인증 UI
+    briefing/              # 브리핑 모델, API, 기능별 카드
+  lib/cn.ts                # 공통 className 유틸리티
+```
+
+## 구조 원칙
+
+- `app`: 라우팅과 페이지 조립만 담당
+- `components/ui`: 도메인과 무관한 공통 디자인 컴포넌트
+- `components/layout`: 여러 페이지에서 공유하는 레이아웃
+- `features`: 인증, 브리핑처럼 기능 단위로 모델·API·UI를 함께 배치
+- `lib`: 전역에서 재사용하는 작은 유틸리티만 배치
+"# daru-fe" 
