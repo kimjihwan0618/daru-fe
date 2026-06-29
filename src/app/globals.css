@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #14376d;
+  --navy-deep: #0d2b5b;
+  --ink: #13233f;
+  --muted: #68778f;
+  --line: #dfe6f0;
+  --canvas: #f4f7fb;
+  --card: #ffffff;
+  --success: #20a565;
+  --danger: #f05d5e;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", Inter, Arial, sans-serif;
+}
+
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+
+.card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(29, 55, 92, 0.055);
+}
+
+.focus-ring:focus-visible {
+  outline: 3px solid rgba(54, 112, 203, 0.28);
+  outline-offset: 2px;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up { animation: fade-up 420ms ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; }
+}
