@@ -14,6 +14,13 @@ export const briefingSchema = z.object({
 export type Briefing = z.infer<typeof briefingSchema>;
 export type Priority = Briefing["priorities"][number];
 
+export const briefingActionResultSchema = z.object({
+  briefingId: z.string(),
+  action: z.enum(["start", "save", "feedback", "share"]),
+});
+
+export type FeedbackValue = "up" | "down";
+
 export const demoBriefing: Briefing = {
   updatedAt: "오전 7:28",
   user: { name: "지환", isGuest: true },

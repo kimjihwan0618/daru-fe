@@ -10,6 +10,8 @@
 - TanStack Query: 서버 상태, 캐시, 재시도 정책
 - Zod: FastAPI 응답 런타임 검증
 - Lucide React: 일관된 아이콘 시스템
+- 공통 API Client: 응답 envelope 검증 및 `ApiError` 표준화
+- Toast Provider: API 성공·실패 메시지 전역 표시
 - ESLint + Next.js 권장 규칙
 
 전역 클라이언트 상태 라이브러리는 현재 MVP에 필요하지 않아 제외했습니다. 사용자 인증이 추가되면 서버 세션을 기준으로 설계하고, 화면 전용 상태는 컴포넌트에 가깝게 유지합니다.
@@ -55,12 +57,15 @@ src/
     page.tsx
   components/
     layout/                # 공통 헤더와 푸터
-    ui/                    # Button, Card, Input, Badge
+    ui/                    # Button, Card, Input, Badge, Skeleton, Toast
     query-provider.tsx
   features/
     auth/                  # 로그인 폼과 인증 UI
     briefing/              # 브리핑 모델, API, 기능별 카드
+    notification/          # 알림 모델과 더미 데이터
   lib/cn.ts                # 공통 className 유틸리티
+  lib/api/                 # HTTP client, ApiResponse, ApiError
+  lib/query-keys.ts        # React Query key factory
 ```
 
 ## 구조 원칙
@@ -70,4 +75,44 @@ src/
 - `components/layout`: 여러 페이지에서 공유하는 레이아웃
 - `features`: 인증, 브리핑처럼 기능 단위로 모델·API·UI를 함께 배치
 - `lib`: 전역에서 재사용하는 작은 유틸리티만 배치
-"# daru-fe" 
+
+## API 호출 흐름
+
+```text
+Component
+  → feature/hooks (useQuery, useMutation)
+  → feature/api
+  → lib/api/client
+  → FastAPI 또는 Next.js mock route
+```
+
+API 응답은 아래 envelope 형식을 사용합니다.
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "처리되었습니다.",
+  "code": "OPTIONAL_CODE"
+}
+```
+
+- mutation 응답의 `message`는 Toast로 표시합니다.
+- 공통 `Button`은 `isPending`과 `loadingText`를 지원합니다.
+- 최초 조회 중에는 `DashboardSkeleton`을 표시합니다.
+- 개발 환경의 모든 API 요청은 `lib/api/client.ts`에서 1초 지연되어 pending UI를 확인할 수 있습니다.
+
+현재 연결된 mock mutation:
+
+- 이메일 로그인, 카카오·네이버·Google 로그인
+- 브리핑 시작
+- 브리핑 저장 및 저장 취소
+- 브리핑 유용성 피드백
+- 브리핑 공유 기록
+
+헤더는 `AuthProvider`의 사용자 상태를 기준으로 렌더링됩니다.
+
+- 비로그인: 로그인 버튼만 표시
+- 로그인: 더미 알림 목록과 프로필 메뉴 표시
+- 프로필 이미지 URL 존재: 이미지 표시
+- 프로필 이미지 없음: 사용자 이름의 첫 글자 표시

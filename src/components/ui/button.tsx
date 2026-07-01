@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
+import { LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 type Variant = "primary" | "secondary" | "ghost" | "social";
@@ -20,9 +21,11 @@ const sizes: Record<Size, string> = {
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
+  isPending?: boolean;
+  loadingText?: string;
 }
 
-export function Button({ className, variant = "primary", size = "md", type = "button", ...props }: ButtonProps) {
+export function Button({ children, className, disabled, isPending = false, loadingText, variant = "primary", size = "md", type = "button", ...props }: ButtonProps) {
   return (
     <button
       type={type}
@@ -32,7 +35,12 @@ export function Button({ className, variant = "primary", size = "md", type = "bu
         sizes[size],
         className,
       )}
+      disabled={disabled || isPending}
+      aria-busy={isPending}
       {...props}
-    />
+    >
+      {isPending && <LoaderCircle size={17} className="animate-spin" />}
+      {isPending && loadingText ? loadingText : children}
+    </button>
   );
 }

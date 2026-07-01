@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { QueryProvider } from "@/components/query-provider";
+import { ToastProvider } from "@/components/ui/toast-provider";
+import { AuthProvider } from "@/features/auth/auth-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,7 +14,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ko">
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider><ToastProvider><AuthProvider>{children}</AuthProvider></ToastProvider></QueryProvider>
       </body>
     </html>
   );

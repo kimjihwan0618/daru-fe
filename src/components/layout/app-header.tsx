@@ -1,9 +1,12 @@
 "use client";
 
-import { Bell, LogIn, Menu, Search, Settings2, Sparkles, TrendingUp, X } from "lucide-react";
+import { LogIn, Menu, Search, Settings2, Sparkles, TrendingUp, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import { useAuth } from "@/features/auth/auth-provider";
+import { NotificationMenu } from "./notification-menu";
+import { ProfileMenu } from "./profile-menu";
 
 const navItems = [
   { label: "오늘의 브리핑", href: "/", icon: Sparkles },
@@ -14,6 +17,7 @@ const navItems = [
 
 export function AppHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, isReady } = useAuth();
 
   return (
     <>
@@ -30,9 +34,8 @@ export function AppHeader() {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
-            <Link href="/login" className="focus-ring hidden min-h-10 items-center gap-2 rounded-full border border-[#dce4ef] px-4 text-sm font-semibold text-[#27405f] hover:bg-[#f5f8fc] sm:flex"><LogIn size={16} /> 로그인</Link>
-            <button aria-label="알림" className="focus-ring relative rounded-full p-2.5 hover:bg-[#f4f7fb]"><Bell size={20} /><span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#f0595d] ring-2 ring-white" /></button>
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-[#173c72] text-sm font-bold text-white">지</div>
+            {isReady && !user && <Link href="/login" className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-full border border-[#dce4ef] px-4 text-sm font-semibold text-[#27405f] hover:bg-[#f5f8fc]"><LogIn size={16} /> 로그인</Link>}
+            {isReady && user && <><NotificationMenu /><ProfileMenu /></>}
           </div>
         </div>
       </header>
@@ -46,7 +49,7 @@ export function AppHeader() {
               {navItems.map(({ label, href, icon: Icon }, index) => (
                 <Link key={label} href={href} onClick={() => setMenuOpen(false)} className={cn("flex items-center gap-3 rounded-xl px-4 py-3 font-semibold", index === 0 ? "bg-[#edf3fb] text-[#153e76]" : "text-[#617089]")}><Icon size={19} /> {label}</Link>
               ))}
-              <Link href="/login" onClick={() => setMenuOpen(false)} className="mt-4 flex items-center gap-3 rounded-xl border border-[#dce4ed] px-4 py-3 font-semibold text-[#294361]"><LogIn size={19} /> 로그인</Link>
+              {!user && <Link href="/login" onClick={() => setMenuOpen(false)} className="mt-4 flex items-center gap-3 rounded-xl border border-[#dce4ed] px-4 py-3 font-semibold text-[#294361]"><LogIn size={19} /> 로그인</Link>}
             </nav>
           </aside>
         </div>
