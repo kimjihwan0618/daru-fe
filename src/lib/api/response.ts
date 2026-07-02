@@ -7,7 +7,9 @@ export interface ApiResponse<T> {
   code?: string;
 }
 
-export function apiResponseSchema<TSchema extends ZodType>(dataSchema: TSchema) {
+export function apiResponseSchema<TSchema extends ZodType>(
+  dataSchema: TSchema,
+) {
   return z.object({
     success: z.boolean(),
     data: dataSchema,

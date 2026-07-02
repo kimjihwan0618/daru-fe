@@ -7,6 +7,12 @@
 - Next.js 16 App Router + React 19
 - TypeScript
 - Tailwind CSS 4
+- Tailwind `@theme`: 색상, 테두리, 반경, 그림자 디자인 토큰
+- CVA: 공통 UI variant 관리
+- clsx + tailwind-merge: 조건부 class와 Tailwind 충돌 병합
+- Prettier + Tailwind CSS plugin: 코드 및 class 순서 자동 정렬
+- Colocated `*.styles.ts`: JSX와 Tailwind/CVA 스타일 정의 분리
+- PascalCase component folders: `Button/Button.tsx + styles.ts + index.ts`
 - TanStack Query: 서버 상태, 캐시, 재시도 정책
 - Zod: FastAPI 응답 런타임 검증
 - Lucide React: 일관된 아이콘 시스템
@@ -51,14 +57,29 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 ```text
 src/
   app/
+    (home)/
+      page.tsx             # Next.js 예약 라우트 파일
+      store.ts             # 홈 페이지 UI 상태
     api/briefing/route.ts  # 개발용 mock API
-    login/page.tsx         # 로그인 페이지
+    login/
+      page.tsx             # 로그인 페이지
+      store.ts             # 로그인 페이지 UI 상태
+      styles.ts            # 로그인 페이지 스타일
     layout.tsx
-    page.tsx
   components/
-    layout/                # 공통 헤더와 푸터
-    ui/                    # Button, Card, Input, Badge, Skeleton, Toast
-    query-provider.tsx
+    layout/
+      AppHeader/
+        AppHeader.tsx
+        styles.ts
+        index.ts
+    ui/
+      Button/
+        Button.tsx
+        styles.ts
+        index.ts
+    QueryProvider/
+      QueryProvider.tsx
+      index.ts
   features/
     auth/                  # 로그인 폼과 인증 UI
     briefing/              # 브리핑 모델, API, 기능별 카드
