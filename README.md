@@ -1,4 +1,4 @@
-# DARU Frontend
+# Gwiteem Frontend
 
 출근 경로, 날씨, 관심 산업과 종목의 변화를 하나의 **3분 개인화 아침 브리핑**으로 제공하는 Next.js 프론트엔드입니다.
 

@@ -50,7 +50,7 @@ export function DashboardPage() {
 
   async function shareBriefing() {
     const shareData = {
-      title: "DARU 오늘의 3분 브리핑",
+      title: "Gwiteem 오늘의 3분 브리핑",
       text: "오늘 나에게 중요한 변화 3가지를 확인해 보세요.",
       url: window.location.href,
     };
@@ -143,16 +143,11 @@ export function DashboardPage() {
           sharePending={actions.share.isPending}
         />
         <section id="settings" className={dashboardPageStyles.callout}>
-          <div>
-            <p className={dashboardPageStyles.calloutTitle}>
-              이 브리핑을 매일 오전 7:30에 받아보세요
-            </p>
-            <p className={dashboardPageStyles.calloutDescription}>
-              로그인하면 관심사, 출근 경로, 알림 시간을 저장할 수 있어요.
-            </p>
-          </div>
+          <p className={dashboardPageStyles.calloutTitle}>
+            매일 오전 7:30, 내 브리핑 받아보기
+          </p>
           <Link href="/login" className={dashboardPageStyles.calloutLink}>
-            무료로 내 브리핑 만들기
+            무료로 시작하기
           </Link>
         </section>
       </main>

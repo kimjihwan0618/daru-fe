@@ -10,7 +10,7 @@ import {
 } from "react";
 import { authUserSchema, type AuthUser } from "../model";
 
-const STORAGE_KEY = "daru.auth.user";
+const STORAGE_KEY = "gwiteem.auth.user";
 
 interface AuthContextValue {
   user: AuthUser | null;
