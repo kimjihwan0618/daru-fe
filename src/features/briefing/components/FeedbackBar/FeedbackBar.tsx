@@ -8,7 +8,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { feedbackBarStyles, feedbackButtonVariants } from "./styles";
+import {
+  feedbackBarStyles,
+  feedbackButtonVariants,
+} from "./styles";
 
 type Feedback = "up" | "down" | null;
 

@@ -8,7 +8,11 @@ import {
   useMemo,
   useState,
 } from "react";
-import { toastIconVariants, toastStyles, toastVariants } from "./styles";
+import {
+  toastIconVariants,
+  toastStyles,
+  toastVariants,
+} from "./styles";
 
 type ToastType = "success" | "error" | "info";
 type Toast = { id: number; message: string; type: ToastType };

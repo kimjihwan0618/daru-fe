@@ -1,7 +1,10 @@
 import { ChevronRight, Info } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import type { Briefing } from "../../model";
-import { stockChangeVariants, stockImpactCardStyles } from "./styles";
+import {
+  stockChangeVariants,
+  stockImpactCardStyles,
+} from "./styles";
 
 const lines = [
   "3,14 12,11 20,18 28,7 36,14 45,9 54,19 62,12 72,17 82,7 92,13 103,10",

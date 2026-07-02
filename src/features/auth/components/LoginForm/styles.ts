@@ -13,15 +13,26 @@ export const rememberIndicatorVariants = cva(
 );
 
 export const socialButtonVariants = cva(
-  "focus-ring inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-white px-4 text-sm font-bold text-ink-soft transition hover:border-border-strong disabled:cursor-not-allowed disabled:opacity-60",
+  "group focus-ring flex min-w-0 flex-col items-center gap-2 rounded-xl px-1 py-1 text-sm font-semibold text-ink-soft transition-colors disabled:cursor-not-allowed disabled:opacity-60",
   {
     variants: {
       provider: {
-        kakao:
-          "border-social-kakao bg-social-kakao text-ink hover:bg-social-kakao-hover",
-        naver:
-          "border-social-naver bg-social-naver text-white hover:bg-social-naver-hover",
-        google: "",
+        kakao: "hover:text-ink",
+        naver: "hover:text-social-naver-hover",
+        google: "hover:text-social-google-hover",
+      },
+    },
+  },
+);
+
+export const socialMarkVariants = cva(
+  "grid h-16 w-16 place-items-center rounded-full transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg",
+  {
+    variants: {
+      provider: {
+        kakao: "bg-social-kakao text-ink group-hover:bg-social-kakao-hover",
+        naver: "bg-social-naver text-white group-hover:bg-social-naver-hover",
+        google: "bg-surface-subtle group-hover:bg-border-subtle",
       },
     },
   },
@@ -29,14 +40,14 @@ export const socialButtonVariants = cva(
 
 export const loginFormStyles = {
   root: "w-full max-w-[430px]",
-  intro: "mb-8",
+  intro: "mb-4",
   eyebrow: "mb-2 text-sm font-bold text-brand-600",
-  title: "text-[34px] font-extrabold tracking-[-0.045em] text-ink",
-  description: "mt-3 leading-7 text-muted",
-  socialGrid: "grid gap-3 sm:grid-cols-3",
-  divider: "my-7 flex items-center gap-4 text-xs font-medium text-subtle",
+  title: "text-[32px] font-extrabold tracking-[-0.045em] text-ink",
+  description: "mt-2 leading-6 text-muted",
+  socialGrid: "grid grid-cols-3 gap-2",
+  divider: "my-3 flex items-center gap-4 text-xs font-medium text-subtle",
   dividerLine: "h-px flex-1 bg-border-subtle",
-  form: "space-y-5",
+  form: "space-y-3",
   field: "block",
   fieldLabel: "mb-2 block text-sm font-bold text-ink-soft",
   fieldHeader: "mb-2 flex items-center justify-between",
@@ -51,12 +62,12 @@ export const loginFormStyles = {
   rememberButton:
     "focus-ring flex items-center gap-2 rounded-lg text-sm font-medium text-muted",
   submitButton: "w-full",
-  signUpPrompt: "mt-6 text-center text-sm text-muted",
+  signUpPrompt: "mt-3 text-center text-sm text-muted",
   signUpLink: "focus-ring rounded font-bold text-brand-700",
   guestLink:
-    "focus-ring mx-auto mt-6 block w-fit rounded-lg text-sm font-semibold text-muted hover:text-brand-700",
-  demoNotice:
-    "mt-6 rounded-xl bg-surface-subtle px-4 py-3 text-center text-xs leading-5 text-subtle",
+    "focus-ring mx-auto mt-3 block w-fit rounded-lg text-sm font-semibold text-muted hover:text-brand-700",
   loader: "animate-spin",
-  socialMark: "grid h-5 w-5 place-items-center rounded text-xs font-black",
+  socialLabel: "text-center text-[13px] leading-5 whitespace-nowrap sm:text-sm",
+  brandIcon: "h-8 w-8",
+  naverGlyph: "text-[28px] leading-none font-black",
 } as const;

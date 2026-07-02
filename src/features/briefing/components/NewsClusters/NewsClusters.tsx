@@ -8,7 +8,10 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import type { Briefing } from "../../model";
-import { clusterVisualVariants, newsClustersStyles } from "./styles";
+import {
+  clusterVisualVariants,
+  newsClustersStyles,
+} from "./styles";
 
 const tones = ["brand", "success", "violet"] as const;
 const icons = [CircleDollarSign, Landmark, Sparkles];
