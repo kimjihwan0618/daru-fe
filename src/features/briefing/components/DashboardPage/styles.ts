@@ -8,7 +8,8 @@ export const dashboardPageStyles = {
     "mt-5 grid gap-5 xl:grid-cols-[minmax(0,2.05fr)_minmax(330px,0.95fr)]",
   callout:
     "mt-6 flex flex-col items-center justify-between gap-4 rounded-2xl bg-brand-700 px-6 py-6 text-white sm:flex-row sm:px-8",
-  calloutTitle: "text-lg font-bold",
+  calloutTitle: "font-bold",
+  calloutDescription: "mt-1 text-sm text-white/70",
   calloutLink:
     "focus-ring shrink-0 rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-brand-700",
   statusBar: "mb-5 flex flex-wrap items-center justify-between gap-3",

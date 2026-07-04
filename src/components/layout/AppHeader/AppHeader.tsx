@@ -43,7 +43,7 @@ export function AppHeader() {
             <Menu size={22} />
           </button>
           <Link href="/" className={appHeaderStyles.logo}>
-            Gwiteem
+            DARU
           </Link>
           <nav className={appHeaderStyles.desktopNav}>
             {navItems.map(({ label, href }, index) => (
@@ -85,7 +85,7 @@ export function AppHeader() {
           <aside className={appHeaderStyles.mobilePanel}>
             <div className={appHeaderStyles.mobileHeader}>
               <Link href="/" className={appHeaderStyles.mobileLogo}>
-                Gwiteem
+                DARU
               </Link>
               <button
                 onClick={() => setMenuOpen(false)}

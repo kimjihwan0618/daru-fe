@@ -13,8 +13,8 @@ export function ProfileMenu() {
   const toast = useToast();
   if (!user) return null;
 
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await logout();
     setOpen(false);
     toast.info("로그아웃했습니다.");
   }
@@ -37,7 +37,9 @@ export function ProfileMenu() {
             <Avatar name={user.name} avatarUrl={user.avatarUrl} />
             <div className={profileMenuStyles.identityText}>
               <p className={profileMenuStyles.name}>{user.name}</p>
-              <p className={profileMenuStyles.email}>{user.email}</p>
+              {user.email && (
+                <p className={profileMenuStyles.email}>{user.email}</p>
+              )}
             </div>
           </div>
           <div className={profileMenuStyles.actions}>
@@ -48,7 +50,10 @@ export function ProfileMenu() {
               <Settings2 size={17} /> 관심 설정
             </button>
           </div>
-          <button onClick={handleLogout} className={profileMenuStyles.logout}>
+          <button
+            onClick={() => void handleLogout()}
+            className={profileMenuStyles.logout}
+          >
             <LogOut size={17} /> 로그아웃
           </button>
         </div>

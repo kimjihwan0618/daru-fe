@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { loginRequestSchema, tokenResponseSchema } from "@/features/auth/model";
+import {
+  registerRequestSchema,
+  tokenResponseSchema,
+} from "@/features/auth/model";
 import {
   authErrorResponse,
   mapAuthUser,
@@ -8,7 +11,7 @@ import {
 } from "@/features/auth/server";
 
 export async function POST(request: Request) {
-  const parsed = loginRequestSchema.safeParse(
+  const parsed = registerRequestSchema.safeParse(
     await request.json().catch(() => null),
   );
   if (!parsed.success) {
@@ -16,8 +19,8 @@ export async function POST(request: Request) {
       {
         success: false,
         data: null,
-        message: "이메일과 비밀번호를 확인해 주세요.",
-        code: "INVALID_LOGIN_INPUT",
+        message: "회원가입 정보를 확인해 주세요.",
+        code: "INVALID_REGISTER_INPUT",
       },
       { status: 400 },
     );
@@ -25,23 +28,23 @@ export async function POST(request: Request) {
 
   try {
     const token = await requestAuthBackend(
-      "/api/v1/auth/login",
+      "/api/v1/auth/register",
       tokenResponseSchema,
       {
         method: "POST",
         body: JSON.stringify({
           email: parsed.data.email,
           password: parsed.data.password,
+          nickname: parsed.data.nickname,
         }),
       },
     );
     const user = mapAuthUser(token.user, parsed.data.email);
     await persistAuthSession(token, user, parsed.data.remember);
-
     return NextResponse.json({
       success: true,
       data: { user },
-      message: "로그인되었습니다.",
+      message: "회원가입이 완료되었습니다.",
     });
   } catch (error) {
     return authErrorResponse(error);

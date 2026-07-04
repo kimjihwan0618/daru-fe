@@ -8,15 +8,14 @@ import {
   useMemo,
   useState,
 } from "react";
-import { authUserSchema, type AuthUser } from "../model";
-
-const STORAGE_KEY = "gwiteem.auth.user";
+import { getSession, logoutSession } from "../api";
+import type { AuthUser } from "../model";
 
 interface AuthContextValue {
   user: AuthUser | null;
   isReady: boolean;
   setUser: (user: AuthUser) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -26,31 +25,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const restoreTimer = window.setTimeout(() => {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        try {
-          const parsed = authUserSchema.safeParse(JSON.parse(stored));
-          if (parsed.success) setUserState(parsed.data);
-          else window.localStorage.removeItem(STORAGE_KEY);
-        } catch {
-          window.localStorage.removeItem(STORAGE_KEY);
-        }
-      }
-      setIsReady(true);
-    }, 0);
-
-    return () => window.clearTimeout(restoreTimer);
+    let isMounted = true;
+    getSession()
+      .then((response) => {
+        if (isMounted) setUserState(response.data.user);
+      })
+      .catch(() => {
+        if (isMounted) setUserState(null);
+      })
+      .finally(() => {
+        if (isMounted) setIsReady(true);
+      });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const setUser = useCallback((nextUser: AuthUser) => {
     setUserState(nextUser);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
+    setIsReady(true);
   }, []);
 
-  const logout = useCallback(() => {
-    setUserState(null);
-    window.localStorage.removeItem(STORAGE_KEY);
+  const logout = useCallback(async () => {
+    try {
+      await logoutSession();
+    } finally {
+      setUserState(null);
+    }
   }, []);
 
   const value = useMemo(

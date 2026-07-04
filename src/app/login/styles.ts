@@ -13,11 +13,13 @@ export const loginPageStyles = {
     "inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-bold text-brand-50",
   headline:
     "mt-6 text-[40px] leading-[1.18] font-extrabold tracking-[-0.05em] xl:text-[44px]",
-  benefits: "mt-8 space-y-3",
-  benefit: "flex items-center gap-3",
+  description: "mt-4 max-w-[440px] text-base leading-7 text-brand-200",
+  benefits: "mt-8 space-y-4",
+  benefit: "flex gap-4",
   benefitIcon:
     "grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-brand-100",
   benefitTitle: "font-bold",
+  benefitDescription: "mt-1 text-[13px] leading-5 text-brand-200",
   copyright: "relative z-10 text-xs text-white/45",
   formPanel: "flex min-h-screen flex-col px-5 py-5 sm:px-10 lg:px-12 xl:px-18",
   formHeader: "flex items-center justify-between lg:justify-end",

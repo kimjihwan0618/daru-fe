@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { loginRequestSchema, tokenResponseSchema } from "@/features/auth/model";
+import {
+  oauthCallbackRequestSchema,
+  tokenResponseSchema,
+} from "@/features/auth/model";
 import {
   authErrorResponse,
   mapAuthUser,
@@ -8,7 +11,7 @@ import {
 } from "@/features/auth/server";
 
 export async function POST(request: Request) {
-  const parsed = loginRequestSchema.safeParse(
+  const parsed = oauthCallbackRequestSchema.safeParse(
     await request.json().catch(() => null),
   );
   if (!parsed.success) {
@@ -16,8 +19,8 @@ export async function POST(request: Request) {
       {
         success: false,
         data: null,
-        message: "이메일과 비밀번호를 확인해 주세요.",
-        code: "INVALID_LOGIN_INPUT",
+        message: "소셜 로그인 요청이 올바르지 않습니다.",
+        code: "INVALID_OAUTH_CALLBACK",
       },
       { status: 400 },
     );
@@ -25,23 +28,16 @@ export async function POST(request: Request) {
 
   try {
     const token = await requestAuthBackend(
-      "/api/v1/auth/login",
+      `/api/v1/auth/${parsed.data.provider}/callback`,
       tokenResponseSchema,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: parsed.data.email,
-          password: parsed.data.password,
-        }),
-      },
+      { method: "POST", body: JSON.stringify({ code: parsed.data.code }) },
     );
-    const user = mapAuthUser(token.user, parsed.data.email);
+    const user = mapAuthUser(token.user);
     await persistAuthSession(token, user, parsed.data.remember);
-
     return NextResponse.json({
       success: true,
       data: { user },
-      message: "로그인되었습니다.",
+      message: "소셜 로그인이 완료되었습니다.",
     });
   } catch (error) {
     return authErrorResponse(error);

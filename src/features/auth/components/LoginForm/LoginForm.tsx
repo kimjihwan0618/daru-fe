@@ -44,7 +44,7 @@ export function LoginForm() {
     <div className={loginFormStyles.root}>
       <div className={loginFormStyles.intro}>
         <p className={loginFormStyles.eyebrow}>다시 만나 반가워요</p>
-        <h1 className={loginFormStyles.title}>Gwiteem에 로그인</h1>
+        <h1 className={loginFormStyles.title}>DARU에 로그인</h1>
         <p className={loginFormStyles.description}>
           저장한 관심사와 출근 경로로 나만의 아침 브리핑을 이어서 확인하세요.
         </p>
@@ -142,7 +142,7 @@ export function LoginForm() {
 
       <p className={loginFormStyles.signUpPrompt}>
         아직 계정이 없으신가요?{" "}
-        <Link href="#" className={loginFormStyles.signUpLink}>
+        <Link href="/register" className={loginFormStyles.signUpLink}>
           무료로 시작하기
         </Link>
       </p>
