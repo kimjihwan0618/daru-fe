@@ -43,35 +43,10 @@ export function LoginForm() {
   return (
     <div className={loginFormStyles.root}>
       <div className={loginFormStyles.intro}>
-        <p className={loginFormStyles.eyebrow}>다시 만나 반가워요</p>
-        <h1 className={loginFormStyles.title}>DARU에 로그인</h1>
+        <h1 className={loginFormStyles.title}>로그인</h1>
         <p className={loginFormStyles.description}>
-          저장한 관심사와 출근 경로로 나만의 아침 브리핑을 이어서 확인하세요.
+          Gwiteem 계정으로 나만의 브리핑을 이어보세요.
         </p>
-      </div>
-
-      <div className={loginFormStyles.socialGrid}>
-        <SocialButton
-          label="구글 로그인"
-          provider="google"
-          mutation={socialLoginMutation}
-        />
-        <SocialButton
-          label="네이버 로그인"
-          provider="naver"
-          mutation={socialLoginMutation}
-        />
-        <SocialButton
-          label="카카오 로그인"
-          provider="kakao"
-          mutation={socialLoginMutation}
-        />
-      </div>
-
-      <div className={loginFormStyles.divider}>
-        <span className={loginFormStyles.dividerLine} />
-        또는 이메일로 로그인
-        <span className={loginFormStyles.dividerLine} />
       </div>
 
       <form onSubmit={submit} className={loginFormStyles.form}>
@@ -90,12 +65,7 @@ export function LoginForm() {
           </div>
         </label>
         <label className={loginFormStyles.field}>
-          <div className={loginFormStyles.fieldHeader}>
-            <span className={loginFormStyles.fieldLabelInline}>비밀번호</span>
-            <Link href="#" className={loginFormStyles.forgotLink}>
-              비밀번호를 잊으셨나요?
-            </Link>
-          </div>
+          <span className={loginFormStyles.fieldLabel}>비밀번호</span>
           <div className={loginFormStyles.fieldControl}>
             <LockKeyhole className={loginFormStyles.fieldIcon} size={18} />
             <Input
@@ -117,18 +87,23 @@ export function LoginForm() {
             </button>
           </div>
         </label>
-        <button
-          type="button"
-          role="checkbox"
-          aria-checked={remember}
-          onClick={() => setRemember(!remember)}
-          className={loginFormStyles.rememberButton}
-        >
-          <span className={rememberIndicatorVariants({ checked: remember })}>
-            {remember && <Check size={14} strokeWidth={3} />}
-          </span>
-          로그인 상태 유지
-        </button>
+        <div className={loginFormStyles.optionsRow}>
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={remember}
+            onClick={() => setRemember(!remember)}
+            className={loginFormStyles.rememberButton}
+          >
+            <span className={rememberIndicatorVariants({ checked: remember })}>
+              {remember && <Check size={14} strokeWidth={3} />}
+            </span>
+            로그인 상태 유지
+          </button>
+          <Link href="#" className={loginFormStyles.forgotLink}>
+            비밀번호 찾기
+          </Link>
+        </div>
         <Button
           type="submit"
           size="lg"
@@ -140,10 +115,34 @@ export function LoginForm() {
         </Button>
       </form>
 
+      <div className={loginFormStyles.divider}>
+        <span className={loginFormStyles.dividerLine} />
+        간편 로그인
+        <span className={loginFormStyles.dividerLine} />
+      </div>
+
+      <div className={loginFormStyles.socialGrid}>
+        <SocialButton
+          label="Google"
+          provider="google"
+          mutation={socialLoginMutation}
+        />
+        <SocialButton
+          label="네이버"
+          provider="naver"
+          mutation={socialLoginMutation}
+        />
+        <SocialButton
+          label="카카오"
+          provider="kakao"
+          mutation={socialLoginMutation}
+        />
+      </div>
+
       <p className={loginFormStyles.signUpPrompt}>
         아직 계정이 없으신가요?{" "}
         <Link href="/register" className={loginFormStyles.signUpLink}>
-          무료로 시작하기
+          회원가입
         </Link>
       </p>
       <Link href="/" className={loginFormStyles.guestLink}>
@@ -169,6 +168,7 @@ function SocialButton({
       type="button"
       disabled={mutation.isPending}
       aria-busy={isCurrentPending}
+      aria-label={`${label}로 로그인`}
       onClick={() => mutation.mutate(provider)}
       className={socialButtonVariants({ provider })}
     >

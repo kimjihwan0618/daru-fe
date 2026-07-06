@@ -7,6 +7,7 @@ import {
   Settings2,
   Sparkles,
   TrendingUp,
+  UserPlus,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -43,7 +44,7 @@ export function AppHeader() {
             <Menu size={22} />
           </button>
           <Link href="/" className={appHeaderStyles.logo}>
-            DARU
+            Gwiteem
           </Link>
           <nav className={appHeaderStyles.desktopNav}>
             {navItems.map(({ label, href }, index) => (
@@ -61,9 +62,14 @@ export function AppHeader() {
           </nav>
           <div className={appHeaderStyles.actions}>
             {isReady && !user && (
-              <Link href="/login" className={appHeaderStyles.loginLink}>
-                <LogIn size={16} /> 로그인
-              </Link>
+              <>
+                <Link href="/login" className={appHeaderStyles.loginLink}>
+                  <LogIn size={16} /> 로그인
+                </Link>
+                <Link href="/register" className={appHeaderStyles.signUpLink}>
+                  <UserPlus size={16} /> 회원가입
+                </Link>
+              </>
             )}
             {isReady && user && (
               <>
@@ -85,7 +91,7 @@ export function AppHeader() {
           <aside className={appHeaderStyles.mobilePanel}>
             <div className={appHeaderStyles.mobileHeader}>
               <Link href="/" className={appHeaderStyles.mobileLogo}>
-                DARU
+                Gwiteem
               </Link>
               <button
                 onClick={() => setMenuOpen(false)}
@@ -106,13 +112,22 @@ export function AppHeader() {
                 </Link>
               ))}
               {!user && (
-                <Link
-                  href="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className={appHeaderStyles.mobileLogin}
-                >
-                  <LogIn size={19} /> 로그인
-                </Link>
+                <div className={appHeaderStyles.mobileAuthActions}>
+                  <Link
+                    href="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className={appHeaderStyles.mobileLogin}
+                  >
+                    <LogIn size={19} /> 로그인
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setMenuOpen(false)}
+                    className={appHeaderStyles.mobileSignUp}
+                  >
+                    <UserPlus size={19} /> 회원가입
+                  </Link>
+                </div>
               )}
             </nav>
           </aside>

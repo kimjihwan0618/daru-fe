@@ -1,6 +1,8 @@
 "use client";
 
+import { Eye, EyeOff, LockKeyhole, Mail, UserRound } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useRegisterMutation } from "../../hooks/use-login-mutation";
@@ -8,6 +10,7 @@ import { registerFormStyles } from "./styles";
 
 export function RegisterForm() {
   const registerMutation = useRegisterMutation();
+  const [showPassword, setShowPassword] = useState(false);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,28 +25,62 @@ export function RegisterForm() {
 
   return (
     <div className={registerFormStyles.root}>
-      <h1 className={registerFormStyles.title}>DARU 시작하기</h1>
-      <p className={registerFormStyles.description}>
-        계정을 만들고 나만의 출퇴근 브리핑을 받아보세요.
-      </p>
+      <div className={registerFormStyles.intro}>
+        <h1 className={registerFormStyles.title}>회원가입</h1>
+        <p className={registerFormStyles.description}>
+          기본 정보만 입력하면 바로 시작할 수 있어요.
+        </p>
+      </div>
       <form onSubmit={submit} className={registerFormStyles.form}>
         <label className={registerFormStyles.field}>
           <span className={registerFormStyles.label}>닉네임</span>
-          <Input name="nickname" required autoComplete="nickname" />
+          <div className={registerFormStyles.fieldControl}>
+            <UserRound className={registerFormStyles.fieldIcon} size={18} />
+            <Input
+              name="nickname"
+              required
+              autoComplete="nickname"
+              placeholder="브리핑에서 사용할 이름"
+              className={registerFormStyles.input}
+            />
+          </div>
         </label>
         <label className={registerFormStyles.field}>
           <span className={registerFormStyles.label}>이메일</span>
-          <Input name="email" type="email" required autoComplete="email" />
+          <div className={registerFormStyles.fieldControl}>
+            <Mail className={registerFormStyles.fieldIcon} size={18} />
+            <Input
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="name@example.com"
+              className={registerFormStyles.input}
+            />
+          </div>
         </label>
         <label className={registerFormStyles.field}>
           <span className={registerFormStyles.label}>비밀번호</span>
-          <Input
-            name="password"
-            type="password"
-            required
-            minLength={6}
-            autoComplete="new-password"
-          />
+          <div className={registerFormStyles.fieldControl}>
+            <LockKeyhole className={registerFormStyles.fieldIcon} size={18} />
+            <Input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              required
+              minLength={6}
+              autoComplete="new-password"
+              placeholder="비밀번호 6자 이상"
+              className={registerFormStyles.passwordInput}
+            />
+            <button
+              type="button"
+              aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+              onClick={() => setShowPassword(!showPassword)}
+              className={registerFormStyles.visibilityButton}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </label>
         <Button
           type="submit"
@@ -52,7 +89,7 @@ export function RegisterForm() {
           isPending={registerMutation.isPending}
           loadingText="가입 중..."
         >
-          무료로 시작하기
+          회원가입
         </Button>
       </form>
       <p className={registerFormStyles.loginPrompt}>

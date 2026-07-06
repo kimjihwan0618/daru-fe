@@ -34,6 +34,8 @@ export const appHeaderStyles = {
   actions: "ml-auto flex items-center gap-2 sm:gap-3",
   loginLink:
     "focus-ring inline-flex min-h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-semibold text-ink-soft hover:bg-surface-muted",
+  signUpLink:
+    "focus-ring inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-700 px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-800",
   mobileLayer: "fixed inset-0 z-50 lg:hidden",
   mobileBackdrop: "absolute inset-0 bg-brand-900/40",
   mobilePanel: "relative h-full w-[290px] bg-white p-6 shadow-2xl",
@@ -41,6 +43,9 @@ export const appHeaderStyles = {
   mobileLogo: "text-2xl font-black text-brand-700 italic",
   closeButton: "focus-ring rounded-lg p-2",
   mobileNav: "space-y-2",
+  mobileAuthActions: "mt-4 space-y-2 border-t border-border pt-4",
   mobileLogin:
-    "mt-4 flex items-center gap-3 rounded-xl border border-border px-4 py-3 font-semibold text-ink-soft",
+    "flex items-center gap-3 rounded-xl border border-border px-4 py-3 font-semibold text-ink-soft",
+  mobileSignUp:
+    "flex items-center gap-3 rounded-xl bg-brand-700 px-4 py-3 font-bold text-white",
 } as const;
