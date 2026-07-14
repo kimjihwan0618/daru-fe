@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { getSession, logoutSession } from "../api";
+import { createContext, useContext, useMemo } from "react";
+import { useAuthSession } from "@/app/(page)/hooks";
 import type { AuthUser } from "../model";
 
 interface AuthContextValue {
@@ -21,38 +14,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUserState] = useState<AuthUser | null>(null);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    getSession()
-      .then((response) => {
-        if (isMounted) setUserState(response.data.user);
-      })
-      .catch(() => {
-        if (isMounted) setUserState(null);
-      })
-      .finally(() => {
-        if (isMounted) setIsReady(true);
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const setUser = useCallback((nextUser: AuthUser) => {
-    setUserState(nextUser);
-    setIsReady(true);
-  }, []);
-
-  const logout = useCallback(async () => {
-    try {
-      await logoutSession();
-    } finally {
-      setUserState(null);
-    }
-  }, []);
+  const { user, isReady, setUser, logout } = useAuthSession();
 
   const value = useMemo(
     () => ({ user, isReady, setUser, logout }),

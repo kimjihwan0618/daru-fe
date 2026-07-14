@@ -1,56 +1,21 @@
-# Gwiteem FE
+# DARU-FE Codex 지침
 
-## 프로젝트
+이 파일은 세부 규칙을 한곳에 모아 안내하는 include 문서다. Codex 및 자동화 에이전트는 작업 전에 아래 규칙 파일을 모두 읽고 적용한다.
 
-- Next16
-- React19
-- TS strict
-- Tailwind4
+## 규칙 파일
 
-## 반드시 지킬 것
+- [제품 맥락](agents/rules/01-product-context.md)
+- [작업 원칙과 응답 방식](agents/rules/02-workflow.md)
+- [기술 스택과 Next.js 주의사항](agents/rules/03-tech-stack.md)
+- [프로젝트 구조](agents/rules/04-project-structure.md)
+- [API, 상태, 인증 규칙](agents/rules/05-api-state-auth.md)
+- [컴포넌트, 스타일, 타입 규칙](agents/rules/06-ui-style-types.md)
+- [Mock, 검증, 완료 정의](agents/rules/07-validation.md)
+- [개발 서버 유지 규칙](agents/rules/08-dev-server.md)
 
-- any 금지
-- 컴포넌트 fetch 금지
-- feature -> api -> client 구조
-- Zod 사용
-- Query 사용
-- 기존 구조 유지
-- 관련없는 파일 수정 금지
+## 우선순위
 
-## 폴더
-
-src/app
-src/features
-src/components
-src/lib
-
-## Page Structure
-
-모든 page route는 다음 구조를 따른다.
-
-page.tsx
-store.ts
-
-필요한 경우만
-styles.ts
-hooks.ts
-components/
-schema.ts
-
-## Component Structure
-
-재사용 컴포넌트는 PascalCase 폴더를 사용한다.
-
-ProfileMenu/
- ├── index.ts
- ├── ProfileMenu.tsx
- └── styles.ts
-
-React 컴포넌트 안에 긴 Tailwind class를 작성하지 않는다.
-
-정적 스타일은 styles.ts에서 관리한다.
-
-## 완료
-
-lint
-build
+1. 사용자 요청을 가장 먼저 따른다.
+2. 이 문서와 세부 규칙 파일을 따른다.
+3. 기존 코드베이스의 패턴을 따른다.
+4. 충돌이 있으면 더 좁고 최근에 추가된 규칙을 우선한다.

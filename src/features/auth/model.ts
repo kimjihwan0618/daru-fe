@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { passwordSchema } from "./password";
 
 export const loginRequestSchema = z.object({
   email: z.string().email(),
@@ -8,9 +9,23 @@ export const loginRequestSchema = z.object({
 
 export const registerRequestSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: passwordSchema,
   nickname: z.string().min(1),
   remember: z.boolean().default(true),
+});
+
+export const emailCodeSendRequestSchema = z.object({
+  email: z.string().email(),
+});
+
+export const emailCodeConfirmRequestSchema = z.object({
+  email: z.string().email(),
+  code: z.string().min(1),
+});
+
+export const passwordResetRequestSchema = z.object({
+  email: z.string().email(),
+  newPassword: passwordSchema,
 });
 
 export const authUserSchema = z.object({
@@ -59,6 +74,11 @@ export const loginUrlResponseSchema = z.object({ login_url: z.string().url() });
 
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 export type RegisterRequest = z.input<typeof registerRequestSchema>;
+export type EmailCodeSendRequest = z.infer<typeof emailCodeSendRequestSchema>;
+export type EmailCodeConfirmRequest = z.infer<
+  typeof emailCodeConfirmRequestSchema
+>;
+export type PasswordResetRequest = z.infer<typeof passwordResetRequestSchema>;
 export type OAuthCallbackRequest = z.input<typeof oauthCallbackRequestSchema>;
 export type AuthUser = z.infer<typeof authUserSchema>;
 export type SocialProvider = z.infer<typeof socialProviderSchema>;

@@ -5,7 +5,10 @@ import {
   sessionResultSchema,
   socialLoginUrlSchema,
   type LoginRequest,
+  type EmailCodeConfirmRequest,
+  type EmailCodeSendRequest,
   type OAuthCallbackRequest,
+  type PasswordResetRequest,
   type RegisterRequest,
   type SocialProvider,
 } from "./model";
@@ -19,6 +22,41 @@ export function login(payload: LoginRequest) {
 
 export function register(payload: RegisterRequest) {
   return apiClient("/api/auth/register", loginResultSchema, {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export function sendEmailVerificationCode(payload: EmailCodeSendRequest) {
+  return apiClient("/api/auth/email-verification", z.null(), {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export function confirmEmailVerificationCode(payload: EmailCodeConfirmRequest) {
+  return apiClient("/api/auth/email-verification/confirm", z.null(), {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export function sendPasswordResetCode(payload: EmailCodeSendRequest) {
+  return apiClient("/api/auth/password-reset/code", z.null(), {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export function confirmPasswordResetCode(payload: EmailCodeConfirmRequest) {
+  return apiClient("/api/auth/password-reset/code/confirm", z.null(), {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export function resetPassword(payload: PasswordResetRequest) {
+  return apiClient("/api/auth/password-reset", z.null(), {
     method: "POST",
     body: payload,
   });

@@ -10,13 +10,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import type { UseMutationResult } from "@tanstack/react-query";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import type { SocialProvider } from "../../model";
-import {
-  useLoginMutation,
-  useSocialLoginMutation,
-} from "../../hooks/use-login-mutation";
+import type { ApiResponse } from "@/lib/api/response";
+import type { AuthUser, LoginRequest, SocialProvider } from "../../model";
 import {
   loginFormStyles,
   rememberIndicatorVariants,
@@ -24,9 +22,23 @@ import {
   socialMarkVariants,
 } from "./styles";
 
-export function LoginForm() {
-  const loginMutation = useLoginMutation();
-  const socialLoginMutation = useSocialLoginMutation();
+export function LoginForm({
+  loginMutation,
+  socialLoginMutation,
+}: {
+  loginMutation: UseMutationResult<
+    ApiResponse<{ user: AuthUser }>,
+    Error,
+    LoginRequest,
+    unknown
+  >;
+  socialLoginMutation: UseMutationResult<
+    ApiResponse<{ loginUrl: string }>,
+    Error,
+    SocialProvider,
+    unknown
+  >;
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
 
@@ -100,7 +112,7 @@ export function LoginForm() {
             </span>
             로그인 상태 유지
           </button>
-          <Link href="#" className={loginFormStyles.forgotLink}>
+          <Link href="/password-reset" className={loginFormStyles.forgotLink}>
             비밀번호 찾기
           </Link>
         </div>
@@ -159,7 +171,12 @@ function SocialButton({
 }: {
   label: string;
   provider: SocialProvider;
-  mutation: ReturnType<typeof useSocialLoginMutation>;
+  mutation: UseMutationResult<
+    ApiResponse<{ loginUrl: string }>,
+    Error,
+    SocialProvider,
+    unknown
+  >;
 }) {
   const isCurrentPending =
     mutation.isPending && mutation.variables === provider;

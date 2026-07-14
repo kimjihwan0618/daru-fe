@@ -3,14 +3,14 @@
 import { Info, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/ToastProvider";
 import { ApiError } from "@/lib/api/response";
-import { useDailyBriefing } from "../../hooks/use-daily-briefing";
-import { useBriefingMutations } from "../../hooks/use-briefing-mutations";
-import type { Priority } from "../../model";
+import type { ApiResponse } from "@/lib/api/response";
+import type { Briefing, FeedbackValue, Priority } from "../../model";
 import { BriefingModal, type ModalState } from "../BriefingModal";
 import { DashboardSkeleton } from "../DashboardSkeleton";
 import { FeedbackBar } from "../FeedbackBar";
@@ -21,10 +21,14 @@ import { ScheduleCard } from "../ScheduleCard";
 import { StockImpactCard } from "../StockImpactCard";
 import { dashboardPageStyles } from "./styles";
 
-export function DashboardPage() {
-  const { data, isLoading, isError, error, refetch, isFetching } =
-    useDailyBriefing();
-  const actions = useBriefingMutations();
+export function DashboardPage({
+  briefing,
+  actions,
+}: {
+  briefing: UseQueryResult<Briefing, Error>;
+  actions: BriefingActions;
+}) {
+  const { data, isLoading, isError, error, refetch, isFetching } = briefing;
   const toast = useToast();
   const [modal, setModal] = useState<ModalState>(null);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
@@ -166,6 +170,28 @@ export function DashboardPage() {
     </div>
   );
 }
+
+type BriefingActionResponse = ApiResponse<{
+  briefingId: string;
+  action: "start" | "save" | "feedback" | "share";
+}>;
+
+type BriefingActions = {
+  start: UseMutationResult<BriefingActionResponse, Error, string, unknown>;
+  save: UseMutationResult<
+    BriefingActionResponse,
+    Error,
+    { briefingId: string; saved: boolean },
+    unknown
+  >;
+  feedback: UseMutationResult<
+    BriefingActionResponse,
+    Error,
+    { briefingId: string; value: FeedbackValue },
+    unknown
+  >;
+  share: UseMutationResult<BriefingActionResponse, Error, string, unknown>;
+};
 
 function StatusBar({ updatedAt }: { updatedAt: string }) {
   return (

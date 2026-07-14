@@ -3,20 +3,31 @@
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { useSocialCallbackMutation } from "../../hooks/use-login-mutation";
-import type { SocialProvider } from "../../model";
+import type { UseMutationResult } from "@tanstack/react-query";
+import type { ApiResponse } from "@/lib/api/response";
+import type {
+  AuthUser,
+  OAuthCallbackRequest,
+  SocialProvider,
+} from "../../model";
 import { oauthCallbackStyles } from "./styles";
 
 export function OAuthCallback({
   provider,
   code,
   error,
+  callback,
 }: {
   provider: SocialProvider | null;
   code?: string;
   error?: string;
+  callback: UseMutationResult<
+    ApiResponse<{ user: AuthUser }>,
+    Error,
+    OAuthCallbackRequest,
+    unknown
+  >;
 }) {
-  const callback = useSocialCallbackMutation();
   const requested = useRef(false);
 
   useEffect(() => {

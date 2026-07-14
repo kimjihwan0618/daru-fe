@@ -7,7 +7,6 @@ import {
   KeyRound,
   LockKeyhole,
   Mail,
-  UserRound,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -21,26 +20,19 @@ import {
 } from "../../hooks/use-verification-timer";
 import {
   emailCodeSendRequestSchema,
-  type AuthUser,
   type EmailCodeConfirmRequest,
   type EmailCodeSendRequest,
-  type RegisterRequest,
+  type PasswordResetRequest,
 } from "../../model";
 import { isPasswordValid } from "../../password";
 import { PasswordRuleHint } from "../PasswordRuleHint";
-import { registerFormStyles } from "./styles";
+import { passwordResetFormStyles } from "./styles";
 
-export function RegisterForm({
-  registerMutation,
+export function PasswordResetForm({
   sendCodeMutation,
   confirmCodeMutation,
+  resetPasswordMutation,
 }: {
-  registerMutation: UseMutationResult<
-    ApiResponse<{ user: AuthUser }>,
-    Error,
-    RegisterRequest,
-    unknown
-  >;
   sendCodeMutation: UseMutationResult<
     ApiResponse<null>,
     Error,
@@ -53,23 +45,31 @@ export function RegisterForm({
     EmailCodeConfirmRequest,
     unknown
   >;
+  resetPasswordMutation: UseMutationResult<
+    ApiResponse<null>,
+    Error,
+    PasswordResetRequest,
+    unknown
+  >;
 }) {
   const verificationTimer = useVerificationTimer();
-  const [showPassword, setShowPassword] = useState(false);
-  const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [hasSentCode, setHasSentCode] = useState(false);
   const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const isEmailValid = emailCodeSendRequestSchema.safeParse({ email }).success;
   const isEmailVerified = verifiedEmail === email;
-  const canRegister =
-    nickname.trim().length > 0 &&
+  const doPasswordsMatch =
+    newPassword.length > 0 && newPassword === passwordConfirmation;
+  const canResetPassword =
     isEmailVerified &&
-    isPasswordValid(password) &&
-    !registerMutation.isPending;
+    isPasswordValid(newPassword) &&
+    doPasswordsMatch &&
+    !resetPasswordMutation.isPending;
 
   function changeEmail(nextEmail: string) {
     setEmail(nextEmail);
@@ -80,7 +80,7 @@ export function RegisterForm({
     verificationTimer.stop();
   }
 
-  function sendVerificationCode() {
+  function sendResetCode() {
     if (!isEmailValid) return;
     sendCodeMutation.mutate(
       { email },
@@ -95,7 +95,7 @@ export function RegisterForm({
     );
   }
 
-  function confirmVerificationCode() {
+  function confirmResetCode() {
     if (!verificationCode.trim() || verificationTimer.remainingSeconds <= 0)
       return;
     confirmCodeMutation.mutate(
@@ -111,44 +111,25 @@ export function RegisterForm({
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!canRegister) return;
-    registerMutation.mutate({
-      nickname: nickname.trim(),
-      email,
-      password,
-      remember: true,
-    });
+    if (!canResetPassword) return;
+    resetPasswordMutation.mutate({ email, newPassword });
   }
 
   return (
-    <div className={registerFormStyles.root}>
-      <div className={registerFormStyles.intro}>
-        <h1 className={registerFormStyles.title}>회원가입</h1>
-        <p className={registerFormStyles.description}>
-          이메일 인증 후 기본 정보를 입력해 주세요.
+    <div className={passwordResetFormStyles.root}>
+      <div className={passwordResetFormStyles.intro}>
+        <h1 className={passwordResetFormStyles.title}>비밀번호 재설정</h1>
+        <p className={passwordResetFormStyles.description}>
+          이메일 인증 후 새 비밀번호를 설정하세요.
         </p>
       </div>
-      <form onSubmit={submit} className={registerFormStyles.form}>
-        <label className={registerFormStyles.field}>
-          <span className={registerFormStyles.label}>닉네임</span>
-          <div className={registerFormStyles.fieldControl}>
-            <UserRound className={registerFormStyles.fieldIcon} size={18} />
-            <Input
-              name="nickname"
-              value={nickname}
-              onChange={(event) => setNickname(event.target.value)}
-              required
-              autoComplete="nickname"
-              placeholder="브리핑에서 사용할 이름"
-              className={registerFormStyles.input}
-            />
-          </div>
-        </label>
-        <label className={registerFormStyles.field}>
-          <span className={registerFormStyles.label}>이메일</span>
-          <div className={registerFormStyles.inputActionRow}>
-            <div className={registerFormStyles.fieldControl}>
-              <Mail className={registerFormStyles.fieldIcon} size={18} />
+
+      <form onSubmit={submit} className={passwordResetFormStyles.form}>
+        <label className={passwordResetFormStyles.field}>
+          <span className={passwordResetFormStyles.label}>이메일</span>
+          <div className={passwordResetFormStyles.inputActionRow}>
+            <div className={passwordResetFormStyles.fieldControl}>
+              <Mail className={passwordResetFormStyles.fieldIcon} size={18} />
               <Input
                 name="email"
                 type="email"
@@ -157,30 +138,31 @@ export function RegisterForm({
                 onChange={(event) => changeEmail(event.target.value)}
                 autoComplete="email"
                 placeholder="name@example.com"
-                className={registerFormStyles.input}
+                className={passwordResetFormStyles.input}
               />
             </div>
             <Button
               type="button"
               variant="secondary"
-              className={registerFormStyles.actionButton}
+              className={passwordResetFormStyles.actionButton}
               disabled={!isEmailValid || isEmailVerified}
               isPending={sendCodeMutation.isPending}
               loadingText="발송 중"
-              onClick={sendVerificationCode}
+              onClick={sendResetCode}
             >
               {hasSentCode ? "재발송" : "인증번호 받기"}
             </Button>
           </div>
         </label>
+
         {hasSentCode && !isEmailVerified && (
-          <div className={registerFormStyles.verificationBlock}>
-            <label className={registerFormStyles.field}>
-              <span className={registerFormStyles.label}>인증번호</span>
-              <div className={registerFormStyles.inputActionRow}>
-                <div className={registerFormStyles.fieldControl}>
+          <div className={passwordResetFormStyles.verificationBlock}>
+            <label className={passwordResetFormStyles.field}>
+              <span className={passwordResetFormStyles.label}>인증번호</span>
+              <div className={passwordResetFormStyles.inputActionRow}>
+                <div className={passwordResetFormStyles.fieldControl}>
                   <KeyRound
-                    className={registerFormStyles.fieldIcon}
+                    className={passwordResetFormStyles.fieldIcon}
                     size={18}
                   />
                   <Input
@@ -192,88 +174,121 @@ export function RegisterForm({
                     inputMode="numeric"
                     autoComplete="one-time-code"
                     placeholder="인증번호 입력"
-                    className={registerFormStyles.codeInput}
+                    className={passwordResetFormStyles.codeInput}
                   />
-                  <span className={registerFormStyles.timer}>
+                  <span className={passwordResetFormStyles.timer}>
                     {formatVerificationTime(verificationTimer.remainingSeconds)}
                   </span>
                 </div>
                 <Button
                   type="button"
-                  className={registerFormStyles.actionButton}
+                  className={passwordResetFormStyles.actionButton}
                   disabled={
                     !verificationCode.trim() ||
                     verificationTimer.remainingSeconds <= 0
                   }
                   isPending={confirmCodeMutation.isPending}
                   loadingText="확인 중"
-                  onClick={confirmVerificationCode}
+                  onClick={confirmResetCode}
                 >
                   인증 확인
                 </Button>
               </div>
             </label>
             {verificationTimer.remainingSeconds <= 0 && (
-              <p className={registerFormStyles.expiredMessage}>
+              <p className={passwordResetFormStyles.expiredMessage}>
                 인증번호가 만료되었습니다. 다시 발송해 주세요.
               </p>
             )}
           </div>
         )}
+
         {isEmailVerified && (
-          <p className={registerFormStyles.verifiedMessage}>
+          <p className={passwordResetFormStyles.verifiedMessage}>
             <CheckCircle2 size={15} /> 이메일 인증이 완료되었습니다.
           </p>
         )}
-        <label className={registerFormStyles.field}>
-          <span className={registerFormStyles.label}>비밀번호</span>
-          <div className={registerFormStyles.fieldControl}>
-            <LockKeyhole className={registerFormStyles.fieldIcon} size={18} />
+
+        <label className={passwordResetFormStyles.field}>
+          <span className={passwordResetFormStyles.label}>새 비밀번호</span>
+          <div className={passwordResetFormStyles.fieldControl}>
+            <LockKeyhole
+              className={passwordResetFormStyles.fieldIcon}
+              size={18}
+            />
             <Input
-              name="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              name="newPassword"
+              value={newPassword}
+              onChange={(event) => setNewPassword(event.target.value)}
               type={showPassword ? "text" : "password"}
               required
               minLength={8}
               maxLength={16}
               autoComplete="new-password"
-              placeholder="8~16자 비밀번호"
-              className={registerFormStyles.passwordInput}
+              placeholder="새 비밀번호"
+              className={passwordResetFormStyles.passwordInput}
             />
             <button
               type="button"
               aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
               onClick={() => setShowPassword(!showPassword)}
-              className={registerFormStyles.visibilityButton}
+              className={passwordResetFormStyles.visibilityButton}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
-          <PasswordRuleHint password={password} />
+          <PasswordRuleHint password={newPassword} />
         </label>
+
+        <label className={passwordResetFormStyles.field}>
+          <span className={passwordResetFormStyles.label}>
+            새 비밀번호 확인
+          </span>
+          <div className={passwordResetFormStyles.fieldControl}>
+            <LockKeyhole
+              className={passwordResetFormStyles.fieldIcon}
+              size={18}
+            />
+            <Input
+              name="passwordConfirmation"
+              value={passwordConfirmation}
+              onChange={(event) => setPasswordConfirmation(event.target.value)}
+              type={showPassword ? "text" : "password"}
+              required
+              minLength={8}
+              maxLength={16}
+              autoComplete="new-password"
+              placeholder="새 비밀번호 다시 입력"
+              className={passwordResetFormStyles.input}
+            />
+          </div>
+          {passwordConfirmation.length > 0 && !doPasswordsMatch && (
+            <p className={passwordResetFormStyles.mismatchMessage}>
+              새 비밀번호가 일치하지 않습니다.
+            </p>
+          )}
+        </label>
+
         <Button
           type="submit"
           size="lg"
-          className={registerFormStyles.submit}
-          disabled={!canRegister}
-          isPending={registerMutation.isPending}
-          loadingText="가입 중..."
+          className={passwordResetFormStyles.submit}
+          disabled={!canResetPassword}
+          isPending={resetPasswordMutation.isPending}
+          loadingText="변경 중..."
         >
-          회원가입
+          비밀번호 변경
         </Button>
         {!isEmailVerified && (
-          <p className={registerFormStyles.submitHint}>
-            이메일 인증을 완료하면 회원가입 버튼이 활성화됩니다.
+          <p className={passwordResetFormStyles.submitHint}>
+            이메일 인증을 완료하면 비밀번호를 변경할 수 있습니다.
           </p>
         )}
       </form>
-      <p className={registerFormStyles.loginPrompt}>
-        이미 계정이 있나요?{" "}
-        <Link href="/login" className={registerFormStyles.loginLink}>
-          로그인
-        </Link>
-      </p>
+
+      <Link href="/login" className={passwordResetFormStyles.loginLink}>
+        로그인으로 돌아가기
+      </Link>
     </div>
   );
 }
