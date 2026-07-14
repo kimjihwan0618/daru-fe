@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { PasswordResetForm } from "@/features/auth/components/PasswordResetForm";
+import { PasswordResetForm } from "@/components/domain/auth/PasswordResetForm";
 import {
   useConfirmPasswordResetCodeMutation,
   useResetPasswordMutation,

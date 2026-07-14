@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { loginRequestSchema, tokenResponseSchema } from "@/features/auth/model";
+import { loginRequestSchema, tokenResponseSchema } from "@/app/(page)/type/auth";
 import {
   authErrorResponse,
   mapAuthUser,
   persistAuthSession,
   requestAuthBackend,
-} from "@/features/auth/server";
+} from "@/app/api/auth/_lib/server";
 
 export async function POST(request: Request) {
   const parsed = loginRequestSchema.safeParse(

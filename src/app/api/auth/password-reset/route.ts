@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { passwordResetRequestSchema } from "@/features/auth/model";
-import { authErrorResponse, requestAuthBackend } from "@/features/auth/server";
+import { passwordResetRequestSchema } from "@/app/(page)/type/auth";
+import { authErrorResponse, requestAuthBackend } from "@/app/api/auth/_lib/server";
 
 export async function POST(request: Request) {
   const parsed = passwordResetRequestSchema.safeParse(

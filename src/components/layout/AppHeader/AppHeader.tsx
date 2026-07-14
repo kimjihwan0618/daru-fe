@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/components/domain/auth/AuthProvider";
 import { NotificationMenu } from "../NotificationMenu";
 import { ProfileMenu } from "../ProfileMenu";
 import {

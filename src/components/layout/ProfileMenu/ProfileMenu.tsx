@@ -4,7 +4,7 @@ import { ChevronDown, LogOut, Settings2, UserRound } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { useToast } from "@/components/ui/ToastProvider";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/components/domain/auth/AuthProvider";
 import { profileMenuStyles } from "./styles";
 
 export function ProfileMenu() {

@@ -3,9 +3,29 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/ToastProvider";
-import { useAuth } from "@/features/auth/AuthProvider";
-import { getSocialLoginUrl, login } from "@/features/auth/api";
+import { useAuth } from "@/components/domain/auth/AuthProvider";
+import { apiClient } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/response";
+import {
+  loginResultSchema,
+  socialLoginUrlSchema,
+  type LoginRequest,
+  type SocialProvider,
+} from "@/app/(page)/type/auth";
+
+function login(payload: LoginRequest) {
+  return apiClient("/api/auth/login", loginResultSchema, {
+    method: "POST",
+    body: payload,
+  });
+}
+
+function getSocialLoginUrl(provider: SocialProvider) {
+  return apiClient(
+    `/api/auth/social-login?provider=${encodeURIComponent(provider)}`,
+    socialLoginUrlSchema,
+  );
+}
 
 function getErrorMessage(error: unknown, fallback: string) {
   return error instanceof ApiError ? error.message : fallback;

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { accessTokenResponseSchema } from "@/features/auth/model";
+import { accessTokenResponseSchema } from "@/app/(page)/type/auth";
 import {
   authErrorResponse,
   clearAuthSession,
   getStoredAuth,
   requestAuthBackend,
   updateAccessToken,
-} from "@/features/auth/server";
+} from "@/app/api/auth/_lib/server";
 
 export async function POST() {
   const { refreshToken } = await getStoredAuth();

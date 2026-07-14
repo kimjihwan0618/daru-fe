@@ -1,8 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { getSession, logoutSession } from "@/features/auth/api";
-import type { AuthUser } from "@/features/auth/model";
+import { z } from "zod";
+import { apiClient } from "@/lib/api/client";
+import { sessionResultSchema, type AuthUser } from "@/app/(page)/type/auth";
+
+function getSession() {
+  return apiClient("/api/auth/session", sessionResultSchema);
+}
+
+function logoutSession() {
+  return apiClient("/api/auth/logout", z.null(), { method: "POST" });
+}
 
 export function useAuthSession() {
   const [user, setUserState] = useState<AuthUser | null>(null);

@@ -2,15 +2,49 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/ToastProvider";
-import {
-  getBriefing,
-  saveBriefing,
-  startBriefing,
-  submitBriefingFeedback,
-  trackBriefingShare,
-} from "@/features/briefing/api";
+import { apiClient } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/response";
 import { queryKeys } from "@/lib/query-keys";
+import {
+  briefingActionResultSchema,
+  briefingSchema,
+  type FeedbackValue,
+} from "../type/briefing";
+
+function getBriefing() {
+  return apiClient("/api/briefing", briefingSchema);
+}
+
+function startBriefing(briefingId: string) {
+  return apiClient("/api/briefing/start", briefingActionResultSchema, {
+    method: "POST",
+    body: { briefingId },
+  });
+}
+
+function saveBriefing(payload: { briefingId: string; saved: boolean }) {
+  return apiClient("/api/briefing/save", briefingActionResultSchema, {
+    method: "POST",
+    body: payload,
+  });
+}
+
+function submitBriefingFeedback(payload: {
+  briefingId: string;
+  value: FeedbackValue;
+}) {
+  return apiClient("/api/briefing/feedback", briefingActionResultSchema, {
+    method: "POST",
+    body: payload,
+  });
+}
+
+function trackBriefingShare(briefingId: string) {
+  return apiClient("/api/briefing/share", briefingActionResultSchema, {
+    method: "POST",
+    body: { briefingId },
+  });
+}
 
 export function useDailyBriefing() {
   return useQuery({

@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { RegisterForm } from "@/features/auth/components/RegisterForm";
+import { RegisterForm } from "@/components/domain/auth/RegisterForm";
 import {
   useConfirmEmailVerificationCodeMutation,
   useRegisterMutation,

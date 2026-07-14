@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getStoredAuth } from "@/features/auth/server";
+import { getStoredAuth } from "@/app/api/auth/_lib/server";
 
 export async function GET() {
   const { user } = await getStoredAuth();

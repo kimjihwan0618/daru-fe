@@ -1,6 +1,6 @@
 "use client";
 
-import { DashboardPage } from "@/features/briefing/components/DashboardPage";
+import { DashboardPage } from "@/components/domain/briefing/DashboardPage";
 import { useBriefingMutations, useDailyBriefing } from "./hooks";
 
 export default function Home() {

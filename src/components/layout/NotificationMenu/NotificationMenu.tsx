@@ -9,7 +9,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { dummyNotifications } from "@/features/notification/model";
+import { dummyNotifications } from "@/components/layout/NotificationMenu/type";
 import {
   notificationItemVariants,
   notificationMenuStyles,

@@ -1,8 +1,8 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
-import { OAuthCallback } from "@/features/auth/components/OAuthCallback";
-import { socialProviderSchema } from "@/features/auth/model";
+import { OAuthCallback } from "@/components/domain/auth/OAuthCallback";
+import { socialProviderSchema } from "@/app/(page)/type/auth";
 import { useSocialCallbackMutation } from "./hooks";
 
 export default function OAuthCallbackPage() {

@@ -6,7 +6,7 @@ import {
   clearAuthSession,
   getStoredAuth,
   requestAuthBackend,
-} from "@/features/auth/server";
+} from "@/app/api/auth/_lib/server";
 
 export async function DELETE() {
   const { accessToken } = await getStoredAuth();

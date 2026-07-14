@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { demoBriefing } from "@/features/briefing/model";
+import { demoBriefing } from "@/app/(page)/(home)/type/briefing";
 
 export async function GET() {
   return NextResponse.json({

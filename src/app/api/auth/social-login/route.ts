@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import {
   loginUrlResponseSchema,
   socialProviderSchema,
-} from "@/features/auth/model";
-import { authErrorResponse, requestAuthBackend } from "@/features/auth/server";
+} from "@/app/(page)/type/auth";
+import { authErrorResponse, requestAuthBackend } from "@/app/api/auth/_lib/server";
 
 export async function GET(request: Request) {
   const provider = socialProviderSchema.safeParse(

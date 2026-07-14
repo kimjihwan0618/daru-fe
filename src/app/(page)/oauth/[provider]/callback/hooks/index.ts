@@ -3,9 +3,20 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/ToastProvider";
-import { useAuth } from "@/features/auth/AuthProvider";
-import { completeSocialLogin } from "@/features/auth/api";
+import { useAuth } from "@/components/domain/auth/AuthProvider";
+import { apiClient } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/response";
+import {
+  loginResultSchema,
+  type OAuthCallbackRequest,
+} from "@/app/(page)/type/auth";
+
+function completeSocialLogin(payload: OAuthCallbackRequest) {
+  return apiClient("/api/auth/callback", loginResultSchema, {
+    method: "POST",
+    body: payload,
+  });
+}
 
 function getErrorMessage(error: unknown, fallback: string) {
   return error instanceof ApiError ? error.message : fallback;

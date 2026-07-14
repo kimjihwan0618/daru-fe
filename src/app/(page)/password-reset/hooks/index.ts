@@ -2,13 +2,36 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
 import { useToast } from "@/components/ui/ToastProvider";
-import {
-  confirmPasswordResetCode,
-  resetPassword,
-  sendPasswordResetCode,
-} from "@/features/auth/api";
+import { apiClient } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/response";
+import {
+  type EmailCodeConfirmRequest,
+  type EmailCodeSendRequest,
+  type PasswordResetRequest,
+} from "@/app/(page)/type/auth";
+
+function sendPasswordResetCode(payload: EmailCodeSendRequest) {
+  return apiClient("/api/auth/password-reset/code", z.null(), {
+    method: "POST",
+    body: payload,
+  });
+}
+
+function confirmPasswordResetCode(payload: EmailCodeConfirmRequest) {
+  return apiClient("/api/auth/password-reset/code/confirm", z.null(), {
+    method: "POST",
+    body: payload,
+  });
+}
+
+function resetPassword(payload: PasswordResetRequest) {
+  return apiClient("/api/auth/password-reset", z.null(), {
+    method: "POST",
+    body: payload,
+  });
+}
 
 function getErrorMessage(error: unknown, fallback: string) {
   return error instanceof ApiError ? error.message : fallback;

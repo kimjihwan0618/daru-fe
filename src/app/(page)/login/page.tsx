@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { LoginForm } from "@/features/auth/components/LoginForm";
+import { LoginForm } from "@/components/domain/auth/LoginForm";
 import { useLoginMutation, useSocialLoginMutation } from "./hooks";
 import { loginPageStyles } from "./styles";
 
